@@ -24,9 +24,17 @@ public class enemy extends JPanel  {
             this.width = w;
             this.height = h;
     }
+    public void set_display_enemy(Boolean display){
+        if (display == false){
+            this.width = 0;
+            this.height = 0;
+        }
+    }
+
     public int getPosition_enemy_x() {
         return enemy_x;
     }
+
 
     public int getPosition_enemy_y() {
         return enemy_y;
@@ -55,7 +63,6 @@ public class enemy extends JPanel  {
         } else if (direction == "x") {
 
             if (this.enemy_x < final_position && increase_x == true){
-                System.out.println("movement on x");
                 this.enemy_x +=1;
             } else if (this.enemy_x == final_position) {
                 increase_x = false;

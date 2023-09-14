@@ -63,6 +63,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     List<Integer> ymarze_list = new ArrayList<>();
     ArrayList<Bullet> bullet_position = new ArrayList<Bullet>();
     ArrayList<enemy> enemy_list = new ArrayList<enemy>();
+    ArrayList<Maze> Maze_list = new ArrayList<Maze>();
     private final int validSpeeds[] = {1,2,3,4,6,8};
     private final int maxSpeed = 6;
     private int currentSpeed = 3;
@@ -74,6 +75,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         initVariables();
         enemy_list.add(new enemy(enemy_icon,180,100,30,30));
         enemy_list.add(new enemy(enemy_icon,280,50,30,30));
+        Maze_list.add(new Maze(130,90,20,140));
         initBoard();
     }
     public void moving_player(){
@@ -134,22 +136,9 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     }
 
 
-    private void drawMaze (Graphics2D g2d , int x,int y){
+    private void drawMaze (Graphics2D g2d , int x,int y,int width,int height){
         g2d.setColor(Color.yellow);
-        g2d.fillRect(x,y,cellSize,cellSize);
-        Rectangle mazeRectangular= new Rectangle(x,y, cellSize, cellSize);
-        if (!rectanglesList.contains(mazeRectangular)){
-             for (int i = mazeRectangular.x; i <= mazeRectangular.x + cellSize; i++){
-                 if (!xmarze_list.contains(i)){
-                     xmarze_list.add(i);
-                 }
-             }
-            for (int j = mazeRectangular.y; j <= mazeRectangular.y + cellSize; j++){
-                if (!ymarze_list.contains(j)){
-                    ymarze_list.add(j);
-                }
-            }
-        }
+        g2d.fillRect(x,y,width,height);
 
     }
     private void drawEnemy(Graphics2D g2d , Image img,int x,int y ,int width , int height){
@@ -188,6 +177,8 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         int index = enemy_list.indexOf(enemy);
         System.out.println(index);
     }
+
+
     public void doDrawing(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.black);
@@ -212,17 +203,25 @@ public class Board extends JPanel implements KeyListener, ActionListener{
 
 
         playGame(g2d,pacman2right,imageX,imageY,300);
-        drawMaze(g2d ,130,130);
-        drawMaze(g2d ,130,150);
-        drawMaze(g2d ,130,170);
-        for (enemy enemys:enemy_list){
-            for (Bullet Bullet:bullet_position){
-                if (bulletIntersectsEnemy(Bullet,enemys)){
-                    System.out.println("Collapse occur");
-                    enemy_list.remove(enemys);
+
+        for (Maze maze:Maze_list){
+            drawMaze(g2d ,maze.getPosition_maze_x(),maze.getPosition_maze_y(),maze.getWidth(),maze.getHeight());
+        }
+        if (enemy_list.size()>0){
+            for (enemy enemies:enemy_list){
+                for (Bullet Bullet:bullet_position){
+                    if (bulletIntersectsEnemy(Bullet,enemies)){
+                        System.out.println("Collapse occur");
+                        enemies.set_display_enemy(false);
+                    }
                 }
             }
         }
+
+//        boolean contains = enemy_list.contains(enemy_list.get(0));
+//        if (contains){
+//            enemy_list.get(0).enemy_movement(100,300,"y");
+//        }
         enemy_list.get(0).enemy_movement(100,300,"y");
         enemy_list.get(1).enemy_movement(100,350,"x");
         checkIntersect();
@@ -319,8 +318,9 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     }
 
     @Override
+
     public void actionPerformed(ActionEvent ae) {
-     repaint();
+        repaint();
     }
 
 //    public static void main(String args[]) {
