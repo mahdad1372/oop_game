@@ -83,6 +83,15 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         Maze_list.add(new Maze(270,240,20,130));
         Maze_list.add(new Maze(270,345,180,20));
         Maze_list.add(new Maze(430,120,20,120));
+        Maze_list.add(new Maze(530,190,20,170));
+        Maze_list.add(new Maze(530,0,20,120));
+        Maze_list.add(new Maze(550,300,100,20));
+        Maze_list.add(new Maze(630,80,20,220));
+        Maze_list.add(new Maze(630,20,300,20));
+        Maze_list.add(new Maze(710,20,20,160));
+        Maze_list.add(new Maze(710,270,20,100));
+        Maze_list.add(new Maze(710,180,80,20));
+        Maze_list.add(new Maze(710,250,80,20));
         initBoard();
     }
     public void moving_player(){
