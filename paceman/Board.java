@@ -73,10 +73,16 @@ public class Board extends JPanel implements KeyListener, ActionListener{
 
     public Board (){
         initVariables();
-        enemy_list.add(new enemy(enemy_icon,180,100,30,30));
-        enemy_list.add(new enemy(enemy_icon,280,50,30,30));
+//        enemy_list.add(new enemy(enemy_icon,180,100,30,30));
+//        enemy_list.add(new enemy(enemy_icon,280,50,30,30));
         Maze_list.add(new Maze(130,0,20,140));
-        Maze_list.add(new Maze(130,180,20,140));
+        Maze_list.add(new Maze(130,200,20,140));
+        Maze_list.add(new Maze(150,40,120,20));
+        Maze_list.add(new Maze(270,40,20,120));
+        Maze_list.add(new Maze(270,100,180,20));
+        Maze_list.add(new Maze(270,240,20,130));
+        Maze_list.add(new Maze(270,345,180,20));
+        Maze_list.add(new Maze(430,120,20,120));
         initBoard();
     }
     public void moving_player(){
@@ -181,6 +187,14 @@ public class Board extends JPanel implements KeyListener, ActionListener{
 
         return bulletRect.intersects(enemyRect);
     }
+    public boolean playerIntersectMaze(Maze maz) {
+        Rectangle playerRect = new Rectangle(imageX, imageY,
+                30, 30);
+        Rectangle enemyRect = new Rectangle(maz.getPosition_maze_x(), maz.getPosition_maze_y(),
+                maz.getWidth(),maz.getHeight());
+
+        return playerRect.intersects(enemyRect);
+    }
 
     public void collapse(Bullet bullet, enemy enemy){
         enemy_list.remove(enemy);
@@ -237,6 +251,8 @@ public class Board extends JPanel implements KeyListener, ActionListener{
                     if (bulletIntersectsMaze(Bullet,maze)){
                         boolean found = bullet_position.contains(Bullet);
                         if (found){
+
+//                            System.out.println(Bullet);
                             bullet_position.remove(Bullet);
                         }
                     }
@@ -245,14 +261,16 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         }
         if (Maze_list.size()>0){
             for (Maze maze:Maze_list){
-                if (maze.getPosition_maze_x() == imageX +30){
-                    imageX -= imageSpeed;
+                if (playerIntersectMaze(maze)){
+                    imageX = maze.getPosition_maze_x() - (maze.getWidth()+30);
+                    imageY = maze.getPosition_maze_y();
+                    System.out.println("the hit occur");
                 }
             }
         }
 
-        enemy_list.get(0).enemy_movement(100,300,"y");
-        enemy_list.get(1).enemy_movement(100,350,"x");
+//        enemy_list.get(0).enemy_movement(100,300,"y");
+//        enemy_list.get(1).enemy_movement(100,350,"x");
         checkIntersect();
         g2d.drawImage(ii,5,5,this);
         Toolkit.getDefaultToolkit().sync();
@@ -310,18 +328,22 @@ public class Board extends JPanel implements KeyListener, ActionListener{
             bullet_position.add(bullet);
         }
         if (keyCode == KeyEvent.VK_LEFT) {
+            this.direction_player = "left";
             player = new ImageIcon("pacman_left.png").getImage();
             if (imageX > 0){
                 imageX -= imageSpeed;
             }
         } else if (keyCode == KeyEvent.VK_RIGHT) {
+            this.direction_player = "right";
             imageX += imageSpeed;
             player = new ImageIcon("pacman.png").getImage();
 
         } else if (keyCode == KeyEvent.VK_UP) {
+            this.direction_player = "up";
             player = new ImageIcon("pacman_up.png").getImage();
             imageY -= imageSpeed;
         } else if (keyCode == KeyEvent.VK_DOWN) {
+            this.direction_player = "down";
             player = new ImageIcon("pacman_down.png").getImage();
             imageY += imageSpeed;
         }

@@ -5,6 +5,8 @@ public class Bullet {
     private int position_x;
     private int position_y;
     private int radius;
+
+    private boolean display_bullet = true;
     Timer t = new java.util.Timer();
     public Bullet(int position_x, int position_y , int radius) {
         this.position_x = position_x;
@@ -32,13 +34,21 @@ public class Bullet {
     public void set_position_y(int y) {
         this.position_y =y;
     }
+    public void hide_bullet(){
+        this.display_bullet = false;
+    }
 
     public int getPosition_x_on_time(String direction) {
-//        if (direction.equals("right")){
-//             position_x++;
-//        } else if (direction.equals("left")) {
-//            position_x--;
-//        }
-        return  position_x++;
+        if (direction == "right"){
+            return  position_x++;
+        } else if (direction == "left") {
+            return  position_x--;
+        }else if (direction == "up") {
+            return  position_y--;
+        }else if (direction == "down") {
+            return  position_y++;
+        }else {
+            return position_x++;
+        }
     }
 }
