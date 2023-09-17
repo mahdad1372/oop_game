@@ -23,10 +23,22 @@ public class Bullet {
     public int get_radius() {
         return radius;
     }
-    public int getPosition_x_on_time() {
-
-        return position_x++;
+    public void set_radius(int r) {
+        this.radius =r;
+    }
+    public void set_position_x(int x) {
+        this.position_x =x;
+    }
+    public void set_position_y(int y) {
+        this.position_y =y;
     }
 
-
+    public int getPosition_x_on_time(String direction) {
+//        if (direction.equals("right")){
+//             position_x++;
+//        } else if (direction.equals("left")) {
+//            position_x--;
+//        }
+        return  position_x++;
+    }
 }

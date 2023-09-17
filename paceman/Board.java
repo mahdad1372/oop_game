@@ -50,12 +50,12 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     private int imageY = 100;
     private int enemy_y = 100;
     private int imageSpeed = 5;
-    private Image enemy_icon;
+    private Image enemy_icon=new ImageIcon("bad-person.png").getImage();
     private Image pacman1,pacman2up,pacman2left,pacman2right,pacman2down;
     private Image pacman3up,pacman3left,pacman3right,pacman3down;
     private Image pacman4up,pacman4left,pacman4right,pacman4down;
     boolean increase = true;
-
+    private Image player =new ImageIcon("pacman.png").getImage();
     private int bullet_shooting_x = imageX;
     private int bullet_shooting_y = imageY;
     List<Rectangle> rectanglesList = new ArrayList<>();
@@ -69,13 +69,14 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     private int currentSpeed = 3;
     private short[] screenData;
     private Timer timer;
+    private String direction_player = "left";
 
     public Board (){
-        loadImages();
         initVariables();
         enemy_list.add(new enemy(enemy_icon,180,100,30,30));
         enemy_list.add(new enemy(enemy_icon,280,50,30,30));
-        Maze_list.add(new Maze(130,90,20,140));
+        Maze_list.add(new Maze(130,0,20,140));
+        Maze_list.add(new Maze(130,180,20,140));
         initBoard();
     }
     public void moving_player(){
@@ -87,13 +88,13 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         timer = new Timer(16, this); // 16ms delay for smooth movement (about 60 FPS)
         timer.start();
         setVisible(true);
-        setBackground(Color.BLACK);
+        setBackground(Color.white);
 
     }
     private void initVariables(){
         screenData = new short[N_BLOCKS*N_BLOCKS];
         mazeColor = Color.BLUE;
-        d = new Dimension(400,400);
+        d = new Dimension(0,400);
         ghost_x = new int[MAX_GHOSTS];
         ghost_dx = new int[MAX_GHOSTS];
         ghost_y = new int[MAX_GHOSTS];
@@ -137,7 +138,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
 
 
     private void drawMaze (Graphics2D g2d , int x,int y,int width,int height){
-        g2d.setColor(Color.yellow);
+        g2d.setColor(Color.BLUE);
         g2d.fillRect(x,y,width,height);
 
     }
@@ -156,7 +157,8 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         Runnable function1 = new Runnable() {
             @Override
             public void run() {
-                bullet_position.get(index).getPosition_x_on_time();
+
+                bullet_position.get(index).getPosition_x_on_time(direction_player);
 
             }
         };
@@ -168,6 +170,14 @@ public class Board extends JPanel implements KeyListener, ActionListener{
                 10, 10);
         Rectangle enemyRect = new Rectangle(enemy.getPosition_enemy_x(), enemy.getPosition_enemy_y(),
                 30,30);
+
+        return bulletRect.intersects(enemyRect);
+    }
+    public boolean bulletIntersectsMaze(Bullet bullet, Maze maz) {
+        Rectangle bulletRect = new Rectangle(bullet.getPosition_x(), bullet.getPosition_y(),
+                10, 10);
+        Rectangle enemyRect = new Rectangle(maz.getPosition_maze_x(), maz.getPosition_maze_y(),
+                maz.getWidth(),maz.getHeight());
 
         return bulletRect.intersects(enemyRect);
     }
@@ -185,9 +195,13 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         g2d.fillRect(0,0,d.width,d.height);
         if (bullet_position.size() > 0){
             for (int i =0; i <bullet_position.size();i++){
-                createBullet(g2d,bullet_position.get(i).getPosition_x(),bullet_position.get(i).getPosition_y());
-                bullet_position(bullet_position.get(i).getPosition_x());
-                bullet_position(i);
+                createBullet(g2d,bullet_position.get(i).getPosition_x(),bullet_position.get(i).getPosition_y(),
+                        10);
+                boolean found = bullet_position.contains(bullet_position.get(i));
+                if (found){
+                    bullet_position(bullet_position.get(i).getPosition_x());
+                    bullet_position(i);
+                }
             }
 
         }
@@ -201,8 +215,8 @@ public class Board extends JPanel implements KeyListener, ActionListener{
             }
         }
 
-
-        playGame(g2d,pacman2right,imageX,imageY,300);
+//        Image player = pacman2right;
+        playGame(g2d,player,imageX,imageY,300);
 
         for (Maze maze:Maze_list){
             drawMaze(g2d ,maze.getPosition_maze_x(),maze.getPosition_maze_y(),maze.getWidth(),maze.getHeight());
@@ -211,17 +225,32 @@ public class Board extends JPanel implements KeyListener, ActionListener{
             for (enemy enemies:enemy_list){
                 for (Bullet Bullet:bullet_position){
                     if (bulletIntersectsEnemy(Bullet,enemies)){
-                        System.out.println("Collapse occur");
                         enemies.set_display_enemy(false);
+                         Bullet.set_radius(0);
                     }
                 }
             }
         }
+        if (Maze_list.size()>0){
+            for (Maze maze:Maze_list){
+                for (Bullet Bullet:bullet_position){
+                    if (bulletIntersectsMaze(Bullet,maze)){
+                        boolean found = bullet_position.contains(Bullet);
+                        if (found){
+                            bullet_position.remove(Bullet);
+                        }
+                    }
+                }
+            }
+        }
+        if (Maze_list.size()>0){
+            for (Maze maze:Maze_list){
+                if (maze.getPosition_maze_x() == imageX +30){
+                    imageX -= imageSpeed;
+                }
+            }
+        }
 
-//        boolean contains = enemy_list.contains(enemy_list.get(0));
-//        if (contains){
-//            enemy_list.get(0).enemy_movement(100,300,"y");
-//        }
         enemy_list.get(0).enemy_movement(100,300,"y");
         enemy_list.get(1).enemy_movement(100,350,"x");
         checkIntersect();
@@ -239,11 +268,11 @@ public class Board extends JPanel implements KeyListener, ActionListener{
 
     }
 
-    private void createBullet(Graphics2D g2d , int x , int y){
+    private void createBullet(Graphics2D g2d , int x , int y , int r){
         g2d.setColor(Color.BLUE);
-        int radius = 5;
-        g2d.fillOval(x, y, 2 * radius, 2 * radius);
-        g2d.drawOval(x, y, 2 * radius, 2 * radius);
+        int radius = r;
+        g2d.fillOval(x, y, radius, radius);
+        g2d.drawOval(x, y, radius, radius);
     }
 
     public void movingplayer(KeyEvent e){
@@ -263,22 +292,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
 
     }
 
-    private void loadImages(){
-        pacman1 = new ImageIcon("pacman.png").getImage();
-        pacman2up = new ImageIcon("pacman.png").getImage();
-        pacman3up = new ImageIcon("pacman.png").getImage();
-        pacman4up = new ImageIcon("pacman.png").getImage();
-        pacman2down = new ImageIcon("pacman.png").getImage();
-        pacman3down = new ImageIcon("pacman.png").getImage();
-        pacman4down = new ImageIcon("pacman.png").getImage();
-        pacman2left = new ImageIcon("pacman.png").getImage();
-        pacman3left = new ImageIcon("pacman.png").getImage();
-        pacman4left = new ImageIcon("pacman.png").getImage();
-        pacman2right = new ImageIcon("pacman.png").getImage();
-        pacman3right = new ImageIcon("pacman.png").getImage();
-        pacman4right = new ImageIcon("pacman.png").getImage();
-        enemy_icon = new ImageIcon("bad-person.png").getImage();
-    }
+
 
 
 
@@ -296,17 +310,19 @@ public class Board extends JPanel implements KeyListener, ActionListener{
             bullet_position.add(bullet);
         }
         if (keyCode == KeyEvent.VK_LEFT) {
-
+            player = new ImageIcon("pacman_left.png").getImage();
             if (imageX > 0){
                 imageX -= imageSpeed;
             }
         } else if (keyCode == KeyEvent.VK_RIGHT) {
             imageX += imageSpeed;
-
+            player = new ImageIcon("pacman.png").getImage();
 
         } else if (keyCode == KeyEvent.VK_UP) {
+            player = new ImageIcon("pacman_up.png").getImage();
             imageY -= imageSpeed;
         } else if (keyCode == KeyEvent.VK_DOWN) {
+            player = new ImageIcon("pacman_down.png").getImage();
             imageY += imageSpeed;
         }
 
