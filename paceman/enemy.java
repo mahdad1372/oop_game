@@ -61,17 +61,20 @@ public class enemy extends JPanel  {
                 increase_y = true;
             }
         } else if (direction == "x") {
-
-            if (this.enemy_x < final_position && increase_x == true){
+            if (this.enemy_x > final_position && increase_x == true){
+                this.enemy_x -=1;
+            } else if (this.enemy_x == final_position && this.enemy_x < curr_position && increase_x == true){
+                this.increase_x = false;
                 this.enemy_x +=1;
-            } else if (this.enemy_x == final_position) {
-                increase_x = false;
+            }else if (increase_x == false && this.enemy_x < curr_position ){
+                this.enemy_x +=1;
+            }
+            else if (increase_x == false && this.enemy_x == curr_position && this.enemy_x > final_position ){
                 this.enemy_x -=1;
-            }else if (this.enemy_x > curr_position && increase_x == false) {
-                this.enemy_x -=1;
-            }else if (this.enemy_x == curr_position && increase_x == false) {
                 increase_x = true;
             }
+
+
         }
     }
     public void set_Position_enemy_x(int x) {

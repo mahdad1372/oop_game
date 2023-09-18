@@ -73,8 +73,8 @@ public class Board extends JPanel implements KeyListener, ActionListener{
 
     public Board (){
         initVariables();
-//        enemy_list.add(new enemy(enemy_icon,180,100,30,30));
-//        enemy_list.add(new enemy(enemy_icon,280,50,30,30));
+        enemy_list.add(new enemy(enemy_icon,200,70,30,30));
+        enemy_list.add(new enemy(enemy_icon,390,165,30,30));
         Maze_list.add(new Maze(130,0,20,140));
         Maze_list.add(new Maze(130,200,20,140));
         Maze_list.add(new Maze(150,40,120,20));
@@ -278,8 +278,8 @@ public class Board extends JPanel implements KeyListener, ActionListener{
             }
         }
 
-//        enemy_list.get(0).enemy_movement(100,300,"y");
-//        enemy_list.get(1).enemy_movement(100,350,"x");
+        enemy_list.get(0).enemy_movement(70,320,"y");
+        enemy_list.get(1).enemy_movement(390,120,"x");
         checkIntersect();
         g2d.drawImage(ii,5,5,this);
         Toolkit.getDefaultToolkit().sync();
