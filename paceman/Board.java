@@ -67,6 +67,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     private final int validSpeeds[] = {1,2,3,4,6,8};
     private final int maxSpeed = 6;
     private int currentSpeed = 3;
+    private int scores = 0;
     private short[] screenData;
     private Timer timer;
     private String direction_player = "left";
@@ -233,6 +234,15 @@ public class Board extends JPanel implements KeyListener, ActionListener{
             }
 
         }
+        g.setFont(new Font("Arial", Font.PLAIN, 24));
+        g.setColor(Color.BLUE);
+        String text = "Score : "+ scores;
+        int x = 750;
+        int y = 100;
+        g.drawString(text, x, y);
+        g.setColor(Color.RED);
+        String text2 = "Health : 100%";
+        g.drawString(text2, 750, 150);
         if (enemy_list.size()>0){
             for (int i=0; i< enemy_list.size();i++){
                 drawEnemy(g2d,enemy_list.get(i).getImage_enemy()
@@ -254,7 +264,10 @@ public class Board extends JPanel implements KeyListener, ActionListener{
                 for (Bullet Bullet:bullet_position){
                     if (bulletIntersectsEnemy(Bullet,enemies)){
                         enemies.set_display_enemy(false);
-                         Bullet.set_radius(0);
+//                         Bullet.set_radius(0);
+                         bullet_position.remove(Bullet);
+
+                         scores +=10;
                     }
                 }
             }

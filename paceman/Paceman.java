@@ -10,7 +10,7 @@ public class Paceman extends JFrame {
 
         JFrame obj = new JFrame();
         Board board = new Board();
-        obj.setBounds(10, 10, 800, 400);
+        obj.setBounds(10, 10, 950, 400);
         obj.setTitle("Pacman");
         obj.setResizable(false);
         obj.setVisible(true);
