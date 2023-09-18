@@ -75,6 +75,11 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         initVariables();
         enemy_list.add(new enemy(enemy_icon,200,70,30,30));
         enemy_list.add(new enemy(enemy_icon,390,165,30,30));
+        enemy_list.add(new enemy(enemy_icon,350,310,30,30));
+        enemy_list.add(new enemy(enemy_icon,480,310,30,30));
+        enemy_list.add(new enemy(enemy_icon,595,140,30,30));
+        enemy_list.add(new enemy(enemy_icon,580,10,30,30));
+        enemy_list.add(new enemy(enemy_icon,665,50,30,30));
         Maze_list.add(new Maze(130,0,20,140));
         Maze_list.add(new Maze(130,200,20,140));
         Maze_list.add(new Maze(150,40,120,20));
@@ -260,8 +265,6 @@ public class Board extends JPanel implements KeyListener, ActionListener{
                     if (bulletIntersectsMaze(Bullet,maze)){
                         boolean found = bullet_position.contains(Bullet);
                         if (found){
-
-//                            System.out.println(Bullet);
                             bullet_position.remove(Bullet);
                         }
                     }
@@ -280,6 +283,11 @@ public class Board extends JPanel implements KeyListener, ActionListener{
 
         enemy_list.get(0).enemy_movement(70,320,"y");
         enemy_list.get(1).enemy_movement(390,120,"x");
+        enemy_list.get(2).enemy_movement(310,120,"y");
+        enemy_list.get(3).enemy_movement(310,70,"y");
+        enemy_list.get(4).enemy_movement(595,450,"x");
+        enemy_list.get(5).enemy_movement(10,180,"y");
+        enemy_list.get(6).enemy_movement(50,210,"y");
         checkIntersect();
         g2d.drawImage(ii,5,5,this);
         Toolkit.getDefaultToolkit().sync();

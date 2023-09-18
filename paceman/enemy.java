@@ -50,7 +50,17 @@ public class enemy extends JPanel  {
     }
     public void enemy_movement(int curr_position,int final_position ,String direction){
         if (direction == "y"){
-            if (this.enemy_y < final_position && increase_y == true){
+            if (this.enemy_y > final_position && increase_y == true){
+                this.enemy_y -=1;
+            }
+            else if (this.enemy_y == final_position && increase_y == true && this.enemy_y < curr_position){
+                increase_y = false;
+                this.enemy_y +=1;
+            }
+            else if (this.enemy_y > final_position && increase_y == false && this.enemy_y < curr_position){
+                this.enemy_y +=1;
+            }
+            else if  (this.enemy_y < final_position && increase_y == true){
                 this.enemy_y +=1;
             } else if (this.enemy_y == final_position) {
                 increase_y = false;
