@@ -70,6 +70,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     private int scores = 0;
     private short[] screenData;
     private Timer timer;
+    private int Health = 100;
     private String direction_player = "left";
 
     public Board (){
@@ -210,6 +211,14 @@ public class Board extends JPanel implements KeyListener, ActionListener{
 
         return playerRect.intersects(enemyRect);
     }
+    public boolean playerIntersectEnemy(enemy enemy) {
+        Rectangle playerRect = new Rectangle(imageX, imageY,
+                30, 30);
+        Rectangle enemyRect = new Rectangle(enemy.getPosition_enemy_x(), enemy.getPosition_enemy_y(),
+                enemy.getWidth(),enemy.getHeight());
+
+        return playerRect.intersects(enemyRect);
+    }
 
     public void collapse(Bullet bullet, enemy enemy){
         enemy_list.remove(enemy);
@@ -268,7 +277,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         int y = 100;
         g.drawString(text, x, y);
         g.setColor(Color.RED);
-        String text2 = "Health : 100%";
+        String text2 = "Health : " + Health +" %";
         g.drawString(text2, 750, 150);
         if (enemy_list.size()>0){
             for (int i=0; i< enemy_list.size();i++){
@@ -293,14 +302,24 @@ public class Board extends JPanel implements KeyListener, ActionListener{
                         if (enemy_list.contains(enemies)){
                             enemy_list.remove(enemies);
                         }
-//                        enemies.set_display_enemy(false);
-//                         Bullet.set_radius(0);
                         if (bullet_position.contains(Bullet)){
                             bullet_position.remove(Bullet);
                         }
                          scores +=10;
                     }
                 }
+            }
+            for (enemy enemies:enemy_list){
+              if (playerIntersectEnemy(enemies)){
+//                  if (enemies.getPosition_enemy_x() == imageX){
+//                      imageX -=20;
+//                  }
+//                  if (enemies.getPosition_enemy_y() == imageY){
+//                      imageX -=20;
+//                  }
+                  imageX -=40;
+                  Health-=10;
+              }
             }
         }
         if (Maze_list.size()>0){
