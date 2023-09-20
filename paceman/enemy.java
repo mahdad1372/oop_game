@@ -17,12 +17,14 @@ public class enemy extends JPanel  {
     private boolean display = true;
     private boolean increase_x = true;
     private boolean increase_y = true;
-    public enemy (Image img, int x, int y,int w , int h){
+    private int enemy_number;
+    public enemy (Image img, int x, int y,int w , int h, int n){
             this.enemy_x = x;
             this.enemy_y = y;
             this.enemy = img;
             this.width = w;
             this.height = h;
+            this.enemy_number = n;
     }
     public void set_display_enemy(Boolean display){
         if (display == false){
@@ -34,7 +36,9 @@ public class enemy extends JPanel  {
     public int getPosition_enemy_x() {
         return enemy_x;
     }
-
+    public int get_enemy_number() {
+        return enemy_number;
+    }
 
     public int getPosition_enemy_y() {
         return enemy_y;

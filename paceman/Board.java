@@ -74,13 +74,13 @@ public class Board extends JPanel implements KeyListener, ActionListener{
 
     public Board (){
         initVariables();
-        enemy_list.add(new enemy(enemy_icon,200,70,30,30));
-        enemy_list.add(new enemy(enemy_icon,390,165,30,30));
-        enemy_list.add(new enemy(enemy_icon,350,310,30,30));
-        enemy_list.add(new enemy(enemy_icon,480,310,30,30));
-        enemy_list.add(new enemy(enemy_icon,595,140,30,30));
-        enemy_list.add(new enemy(enemy_icon,580,10,30,30));
-        enemy_list.add(new enemy(enemy_icon,665,50,30,30));
+        enemy_list.add(new enemy(enemy_icon,200,70,30,30,0));
+        enemy_list.add(new enemy(enemy_icon,390,165,30,30,1));
+        enemy_list.add(new enemy(enemy_icon,350,310,30,30,2));
+        enemy_list.add(new enemy(enemy_icon,480,310,30,30,3));
+        enemy_list.add(new enemy(enemy_icon,595,140,30,30,4));
+        enemy_list.add(new enemy(enemy_icon,580,10,30,30,5));
+        enemy_list.add(new enemy(enemy_icon,665,50,30,30,6));
         Maze_list.add(new Maze(130,0,20,140));
         Maze_list.add(new Maze(130,200,20,140));
         Maze_list.add(new Maze(150,40,120,20));
@@ -217,6 +217,33 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         System.out.println(index);
     }
 
+    public void enemy_movement(){
+        for (enemy enemies:enemy_list){
+            if (enemies.get_enemy_number() == 0){
+                enemies.enemy_movement(70,320,"y");
+            }
+            if (enemies.get_enemy_number() == 1){
+                enemies.enemy_movement(390,120,"x");
+            }
+            if (enemies.get_enemy_number() == 2){
+                enemies.enemy_movement(310,120,"y");
+            }
+            if (enemies.get_enemy_number() == 3){
+                enemies.enemy_movement(310,70,"y");
+            }
+            if (enemies.get_enemy_number() == 4){
+                enemies.enemy_movement(595,450,"x");
+            }
+            if (enemies.get_enemy_number() == 5){
+                enemies.enemy_movement(10,180,"y");
+            }
+            if (enemies.get_enemy_number() == 6){
+                enemies.enemy_movement(50,210,"y");
+            }
+        }
+
+    }
+
 
     public void doDrawing(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
@@ -263,10 +290,14 @@ public class Board extends JPanel implements KeyListener, ActionListener{
             for (enemy enemies:enemy_list){
                 for (Bullet Bullet:bullet_position){
                     if (bulletIntersectsEnemy(Bullet,enemies)){
-                        enemies.set_display_enemy(false);
+                        if (enemy_list.contains(enemies)){
+                            enemy_list.remove(enemies);
+                        }
+//                        enemies.set_display_enemy(false);
 //                         Bullet.set_radius(0);
-                         bullet_position.remove(Bullet);
-
+                        if (bullet_position.contains(Bullet)){
+                            bullet_position.remove(Bullet);
+                        }
                          scores +=10;
                     }
                 }
@@ -293,14 +324,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
                 }
             }
         }
-
-        enemy_list.get(0).enemy_movement(70,320,"y");
-        enemy_list.get(1).enemy_movement(390,120,"x");
-        enemy_list.get(2).enemy_movement(310,120,"y");
-        enemy_list.get(3).enemy_movement(310,70,"y");
-        enemy_list.get(4).enemy_movement(595,450,"x");
-        enemy_list.get(5).enemy_movement(10,180,"y");
-        enemy_list.get(6).enemy_movement(50,210,"y");
+        enemy_movement();
         checkIntersect();
         g2d.drawImage(ii,5,5,this);
         Toolkit.getDefaultToolkit().sync();
