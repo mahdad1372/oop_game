@@ -12,7 +12,7 @@ public class Maze {
         this.Maze_y = y;
         this.width = w;
         this.height = h;
-    }
+}
     public int getPosition_maze_x() {
         return Maze_x;
     }

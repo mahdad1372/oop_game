@@ -162,10 +162,8 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     private void drawMaze (Graphics2D g2d , int x,int y,int width,int height){
         g2d.setColor(Color.BLUE);
         g2d.fillRect(x,y,width,height);
-
     }
     private void drawEnemy(Graphics2D g2d , Image img,int x,int y ,int width , int height){
-
         g2d.drawImage(img,x ,y,width,height,this);
     }
     @Override
@@ -296,27 +294,22 @@ public class Board extends JPanel implements KeyListener, ActionListener{
             drawMaze(g2d ,maze.getPosition_maze_x(),maze.getPosition_maze_y(),maze.getWidth(),maze.getHeight());
         }
         if (enemy_list.size()>0){
-            for (enemy enemies:enemy_list){
-                for (Bullet Bullet:bullet_position){
-                    if (bulletIntersectsEnemy(Bullet,enemies)){
-                        if (enemy_list.contains(enemies)){
-                            enemy_list.remove(enemies);
+                for (int j = 0; j< enemy_list.size();j++){
+                    for (int i= 0 ; i< bullet_position.size();i++){
+                        if (bulletIntersectsEnemy(bullet_position.get(i),enemy_list.get(j))){
+                            if (enemy_list.contains(enemy_list.get(j))){
+                                enemy_list.remove(enemy_list.get(j));
+                            }
+                            if (bullet_position.contains(bullet_position.get(i))){
+                                bullet_position.remove(bullet_position.get(i));
+                            }
                         }
-                        if (bullet_position.contains(Bullet)){
-                            bullet_position.remove(Bullet);
-                        }
-                         scores +=10;
                     }
                 }
-            }
+
+
             for (enemy enemies:enemy_list){
               if (playerIntersectEnemy(enemies)){
-//                  if (enemies.getPosition_enemy_x() == imageX){
-//                      imageX -=20;
-//                  }
-//                  if (enemies.getPosition_enemy_y() == imageY){
-//                      imageX -=20;
-//                  }
                   imageX -=40;
                   Health-=10;
               }
