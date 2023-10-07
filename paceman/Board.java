@@ -16,7 +16,8 @@ import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
+import java.awt.event.*;
+import javax.swing.*;
 public class Board extends JPanel implements KeyListener, ActionListener{
 
     private Dimension d;
@@ -72,7 +73,16 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     private String direction_player = "left";
 
     public Board (){
+
+        JButton b1 = new JButton();
+
+        b1.setSize(400,400);
+        b1.setVisible(true);
+        b1.setText("HelloWorld");
+
+
         Menu_list.add(new Menu(230,40,380,250,"winner"));
+        Menu_list.add(new Menu(230,40,380,250,"looser"));
         initVariables();
         enemy_list.add(new enemy(enemy_icon,200,70,30,30,0));
         enemy_list.add(new enemy(enemy_icon,390,165,30,30,1));
@@ -303,6 +313,13 @@ public class Board extends JPanel implements KeyListener, ActionListener{
                 g2d.setColor(Color.WHITE);
                 g.drawString("WINNER", 380, 110);
             }
+            if (Health <= 0 && menu.get_menu_type() == "looser"){
+                g2d.setColor(Color.RED);
+                g2d.fillRect(menu.getPosition_menu_x(),menu.getPosition_menu_y(),menu.getWidth(),menu.getHeight());
+                g2d.setFont(new Font("Arial", Font.BOLD, 25));
+                g2d.setColor(Color.WHITE);
+                g.drawString("LOOSER", 380, 110);
+            }
 
         }
         if (enemy_list.size()>0){
@@ -352,6 +369,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         if (imageX >= 890){
             display_menu_winner = true;
         }
+
         enemy_movement();
         checkIntersect();
         g2d.drawImage(ii,5,5,this);
