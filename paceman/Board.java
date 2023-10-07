@@ -28,15 +28,12 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     private int cellSize = 20;
     private final Color dotColor = new Color(192,192,0);
     private Color mazeColor;
-    private boolean inGame = true;
-    private boolean dying = false;
+    private boolean display_menu_winner;
+
     private boolean Bullet_shooting = false;
     private final int BLOCK_SIZE = 24;
     private final int N_BLOCKS = 15;
-    private final int SCREEN_SIZE = N_BLOCKS * BLOCK_SIZE;
-
     private final int PAC_ANIM_DELAY = 2;
-    private final int PACMAN_ANIM_COUNT = 4;
     private final int MAX_GHOSTS = 12;
     private final int PACMAN_SPEED = 6;
     private int pacAnimCount = PAC_ANIM_DELAY;
@@ -64,6 +61,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     ArrayList<Bullet> bullet_position = new ArrayList<Bullet>();
     ArrayList<enemy> enemy_list = new ArrayList<enemy>();
     ArrayList<Maze> Maze_list = new ArrayList<Maze>();
+    ArrayList<Menu> Menu_list = new ArrayList<Menu>();
     private final int validSpeeds[] = {1,2,3,4,6,8};
     private final int maxSpeed = 6;
     private int currentSpeed = 3;
@@ -74,6 +72,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     private String direction_player = "left";
 
     public Board (){
+        Menu_list.add(new Menu(230,40,380,250,"winner"));
         initVariables();
         enemy_list.add(new enemy(enemy_icon,200,70,30,30,0));
         enemy_list.add(new enemy(enemy_icon,390,165,30,30,1));
@@ -97,8 +96,8 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         Maze_list.add(new Maze(630,20,300,20));
         Maze_list.add(new Maze(710,20,20,160));
         Maze_list.add(new Maze(710,270,20,100));
-        Maze_list.add(new Maze(710,180,80,20));
-        Maze_list.add(new Maze(710,250,80,20));
+        Maze_list.add(new Maze(710,180,230,20));
+        Maze_list.add(new Maze(710,250,230,20));
         initBoard();
     }
     public void moving_player(){
@@ -266,7 +265,6 @@ public class Board extends JPanel implements KeyListener, ActionListener{
                     bullet_position(i);
                 }
             }
-
         }
         g.setFont(new Font("Arial", Font.PLAIN, 24));
         g.setColor(Color.BLUE);
@@ -277,6 +275,10 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         g.setColor(Color.RED);
         String text2 = "Health : " + Health +" %";
         g.drawString(text2, 750, 150);
+        g.setFont(new Font("Arial", Font.BOLD, 20));
+        g.setColor(Color.GREEN);
+        String text3 = "Exit";
+        g.drawString(text3, 890, 230);
         if (enemy_list.size()>0){
             for (int i=0; i< enemy_list.size();i++){
                 drawEnemy(g2d,enemy_list.get(i).getImage_enemy()
@@ -286,12 +288,22 @@ public class Board extends JPanel implements KeyListener, ActionListener{
                         enemy_list.get(i).getHeight());
             }
         }
-
-//        Image player = pacman2right;
         playGame(g2d,player,imageX,imageY,300);
 
         for (Maze maze:Maze_list){
             drawMaze(g2d ,maze.getPosition_maze_x(),maze.getPosition_maze_y(),maze.getWidth(),maze.getHeight());
+        }
+
+        for (Menu menu:Menu_list){
+            if (display_menu_winner == true && menu.get_menu_type() == "winner"){
+
+                g2d.setColor(Color.GREEN);
+                g2d.fillRect(menu.getPosition_menu_x(),menu.getPosition_menu_y(),menu.getWidth(),menu.getHeight());
+                g2d.setFont(new Font("Arial", Font.BOLD, 25));
+                g2d.setColor(Color.WHITE);
+                g.drawString("WINNER", 380, 110);
+            }
+
         }
         if (enemy_list.size()>0){
                 for (int j = 0; j< enemy_list.size();j++){
@@ -303,6 +315,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
                             if (bullet_position.contains(bullet_position.get(i))){
                                 bullet_position.remove(bullet_position.get(i));
                             }
+                            scores+=10;
                         }
                     }
                 }
@@ -316,12 +329,12 @@ public class Board extends JPanel implements KeyListener, ActionListener{
             }
         }
         if (Maze_list.size()>0){
-            for (Maze maze:Maze_list){
-                for (Bullet Bullet:bullet_position){
-                    if (bulletIntersectsMaze(Bullet,maze)){
-                        boolean found = bullet_position.contains(Bullet);
+            for (int i=0; i<Maze_list.size();i++){
+                for (int j=0; j<bullet_position.size();j++){
+                    if (bulletIntersectsMaze(bullet_position.get(j),Maze_list.get(i))){
+                        boolean found = bullet_position.contains(bullet_position.get(j));
                         if (found){
-                            bullet_position.remove(Bullet);
+                            bullet_position.remove(bullet_position.get(j));
                         }
                     }
                 }
@@ -335,6 +348,9 @@ public class Board extends JPanel implements KeyListener, ActionListener{
                     System.out.println("the hit occur");
                 }
             }
+        }
+        if (imageX >= 890){
+            display_menu_winner = true;
         }
         enemy_movement();
         checkIntersect();
