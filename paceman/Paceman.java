@@ -7,7 +7,6 @@ public class Paceman extends JFrame {
 
 
     public static void main(String[] args) {
-
         JFrame obj = new JFrame();
         Board board = new Board();
         obj.setBounds(10, 10, 950, 400);

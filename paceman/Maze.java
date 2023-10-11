@@ -2,7 +2,7 @@ package paceman;
 
 import java.awt.*;
 
-public class Maze {
+public class Maze extends Paceman {
     private int Maze_x;
     private int  Maze_y;
     private int  width ;

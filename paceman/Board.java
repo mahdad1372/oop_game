@@ -73,14 +73,6 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     private String direction_player = "left";
 
     public Board (){
-
-        JButton b1 = new JButton();
-
-        b1.setSize(400,400);
-        b1.setVisible(true);
-        b1.setText("HelloWorld");
-
-
         Menu_list.add(new Menu(230,40,380,250,"winner"));
         Menu_list.add(new Menu(230,40,380,250,"looser"));
         initVariables();

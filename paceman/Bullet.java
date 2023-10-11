@@ -1,7 +1,8 @@
 package paceman;
 
+import java.awt.*;
 import java.util.Timer;
-public class Bullet {
+public class Bullet extends Paceman {
     private int position_x;
     private int position_y;
     private int radius;
@@ -14,6 +15,7 @@ public class Bullet {
         this.radius = radius;
 
     }
+
 
     public int getPosition_x() {
         return position_x;
