@@ -73,16 +73,19 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     private String direction_player = "left";
 
     public Board (){
+
+
+//        enemy.drawEnemy(g2d,enemy_icon,200,70,30,30);
         Menu_list.add(new Menu(230,40,380,250,"winner"));
         Menu_list.add(new Menu(230,40,380,250,"looser"));
         initVariables();
         enemy_list.add(new enemy(enemy_icon,200,70,30,30,0));
         enemy_list.add(new enemy(enemy_icon,390,165,30,30,1));
         enemy_list.add(new enemy(enemy_icon,350,310,30,30,2));
-        enemy_list.add(new enemy(enemy_icon,480,310,30,30,3));
-        enemy_list.add(new enemy(enemy_icon,595,140,30,30,4));
-        enemy_list.add(new enemy(enemy_icon,580,10,30,30,5));
-        enemy_list.add(new enemy(enemy_icon,665,50,30,30,6));
+//        enemy_list.add(new enemy(enemy_icon,480,310,30,30,3));
+//        enemy_list.add(new enemy(enemy_icon,595,140,30,30,4));
+//        enemy_list.add(new enemy(enemy_icon,580,10,30,30,5));
+//        enemy_list.add(new enemy(enemy_icon,665,50,30,30,6));
         Maze_list.add(new Maze(130,0,20,140));
         Maze_list.add(new Maze(130,200,20,140));
         Maze_list.add(new Maze(150,40,120,20));
@@ -257,6 +260,8 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.black);
         g2d.fillRect(0,0,d.width,d.height);
+        Ranged_enemy range_enemy_1 = new Ranged_enemy(enemy_icon,200,70,30,30,0);
+//        range_enemy_1.drawEnemy(g);
         if (bullet_position.size() > 0){
             for (int i =0; i <bullet_position.size();i++){
                 createBullet(g2d,bullet_position.get(i).getPosition_x(),bullet_position.get(i).getPosition_y(),

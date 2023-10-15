@@ -6,7 +6,7 @@ import java.util.Timer;
 import java.awt.Graphics2D;
 
 
-public class enemy extends JPanel  {
+public class enemy  {
     private int enemy_x;
     private int  enemy_y;
     private Image enemy;
@@ -102,5 +102,6 @@ public class enemy extends JPanel  {
 
 
     }
+
 
 }
