@@ -11,6 +11,7 @@ import java.awt.event.KeyListener;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 import java.util.Random;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
@@ -54,6 +55,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     private Image pacman4up,pacman4left,pacman4right,pacman4down;
     boolean increase = true;
     private Image player =new ImageIcon("pacman.png").getImage();
+    private Image enemy1 = new ImageIcon("enemy1.png").getImage();
     private int bullet_shooting_x = imageX;
     private int bullet_shooting_y = imageY;
     List<Rectangle> rectanglesList = new ArrayList<>();
@@ -61,6 +63,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     List<Integer> ymarze_list = new ArrayList<>();
     ArrayList<Bullet> bullet_position = new ArrayList<Bullet>();
     ArrayList<enemy> enemy_list = new ArrayList<enemy>();
+    ArrayList<Ranged_enemy> ranged_enemy_list = new ArrayList<Ranged_enemy>();
     ArrayList<Maze> Maze_list = new ArrayList<Maze>();
     ArrayList<Menu> Menu_list = new ArrayList<Menu>();
     private final int validSpeeds[] = {1,2,3,4,6,8};
@@ -82,6 +85,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         enemy_list.add(new enemy(enemy_icon,200,70,30,30,0));
         enemy_list.add(new enemy(enemy_icon,390,165,30,30,1));
         enemy_list.add(new enemy(enemy_icon,350,310,30,30,2));
+        ranged_enemy_list.add(new Ranged_enemy(enemy1,475,30,30,30,0));
 //        enemy_list.add(new enemy(enemy_icon,480,310,30,30,3));
 //        enemy_list.add(new enemy(enemy_icon,595,140,30,30,4));
 //        enemy_list.add(new enemy(enemy_icon,580,10,30,30,5));
@@ -104,6 +108,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
         Maze_list.add(new Maze(710,180,230,20));
         Maze_list.add(new Maze(710,250,230,20));
         initBoard();
+
     }
     public void moving_player(){
 
@@ -174,6 +179,7 @@ public class Board extends JPanel implements KeyListener, ActionListener{
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         doDrawing(g);
+
     }
     public void bullet_position(Integer index){
         ScheduledExecutorService executor2 = Executors.newScheduledThreadPool(1);
@@ -255,13 +261,22 @@ public class Board extends JPanel implements KeyListener, ActionListener{
 
     }
 
+    public void createImage(){
+
+    }
 
     public void doDrawing(Graphics g){
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.black);
         g2d.fillRect(0,0,d.width,d.height);
-        Ranged_enemy range_enemy_1 = new Ranged_enemy(enemy_icon,200,70,30,30,0);
-//        range_enemy_1.drawEnemy(g);
+
+
+        drawEnemy(g2d, ranged_enemy_list.get(0).getImage_enemy()
+                , ranged_enemy_list.get(0).getPosition_enemy_x()
+                , ranged_enemy_list.get(0).getPosition_enemy_y()
+                , ranged_enemy_list.get(0).getWidth(),
+                ranged_enemy_list.get(0).getHeight());
+
         if (bullet_position.size() > 0){
             for (int i =0; i <bullet_position.size();i++){
                 createBullet(g2d,bullet_position.get(i).getPosition_x(),bullet_position.get(i).getPosition_y(),
